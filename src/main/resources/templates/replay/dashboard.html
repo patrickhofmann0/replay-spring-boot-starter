@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Spring Replay Dashboard</title>
+    <link rel="stylesheet" th:href="@{/replay/style.css}">
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+        function copyToClipboard(button) {
+            const codeElement = button.previousElementSibling.querySelector('code');
+            const text = codeElement.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.innerText;
+                button.innerText = 'Copied!';
+                setTimeout(() => {
+                    button.innerText = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy to clipboard');
+            });
+        }
+    </script>
+</head>
+<body>
+<header>
+    <h1>🚀 Spring Replay</h1>
+    <p>Java 21 & Spring Boot 4 Test Generator</p>
+</header>
+
+<main>
+    <section id="request-list">
+        <h2>Letzte Requests</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Method</th>
+                <th>Path</th>
+                <th>Status</th>
+                <th>Timestamp</th>
+            </tr>
+            </thead>
+            <tbody id="request-table-body"
+                   hx-get="/replay/requests-table"
+                   hx-trigger="every 5s"
+                   hx-swap="innerHTML">
+            <th:block th:fragment="request-table-rows">
+                <tr th:each="req : ${requests}"
+                    class="request-row"
+                    th:attr="hx-get=@{'/replay/details/' + ${req.id}}, hx-target='#request-details', hx-swap='innerHTML'"
+                    style="cursor: pointer;">
+                    <td>
+                        <span th:class="'method-badge ' + ${req.method.toLowerCase()}" th:text="${req.method}">POST</span>
+                    </td>
+                    <td th:text="${req.path}">/api/users</td>
+                    <td>
+                        <span th:class="'status-badge status-' + ${req.responseStatus / 100} + 'xx'" th:text="${req.responseStatus}">201</span>
+                    </td>
+                    <td th:text="${#temporals.format(req.timestamp, 'yyyy-MM-dd HH:mm:ss')}">2024-01-01 12:00:00</td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="details">
+        <h2>Request Details</h2>
+        <div id="request-details">
+            <p>Klicken Sie auf einen Request, um Details anzuzeigen.</p>
+        </div>
+    </section>
+</main>
+</body>
+</html>

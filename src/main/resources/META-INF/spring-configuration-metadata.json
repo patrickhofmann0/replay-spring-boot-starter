@@ -1,0 +1,44 @@
+{
+  "groups": [
+    {
+      "name": "replay",
+      "type": "io.github.patrickhofmann0.replay.config.ReplayProperties",
+      "sourceType": "io.github.patrickhofmann0.replay.config.ReplayProperties",
+      "description": "Configuration properties for Spring Replay request capture and test generation."
+    }
+  ],
+  "properties": [
+    {
+      "name": "replay.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable or disable the Replay functionality. If disabled, no requests will be captured.",
+      "defaultValue": true
+    },
+    {
+      "name": "replay.dashboard-enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable or disable the Replay web dashboard. The dashboard provides a UI to view captured requests and generate test code.",
+      "defaultValue": false
+    },
+    {
+      "name": "replay.max-captured-requests",
+      "type": "java.lang.Integer",
+      "description": "Maximum number of requests to store in memory. Oldest requests will be removed when this limit is reached (FIFO behavior).",
+      "defaultValue": 100
+    },
+    {
+      "name": "replay.exclude-paths",
+      "type": "java.util.List<java.lang.String>",
+      "description": "List of Ant-style path patterns to exclude from request capture. Requests matching these patterns will not be recorded. The /replay/** and /actuator/** paths are always excluded.",
+      "defaultValue": ["/actuator/**", "/favicon.ico"]
+    },
+    {
+      "name": "replay.exclude-headers",
+      "type": "java.util.List<java.lang.String>",
+      "description": "List of HTTP header names that should be redacted in captured requests. These headers will be stored as [REDACTED] for security reasons. Header matching is case-insensitive.",
+      "defaultValue": ["Authorization", "Cookie", "X-Api-Key"]
+    }
+  ],
+  "hints": []
+}
+

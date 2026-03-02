@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Error Fragment -->
+<div th:fragment="error" style='color: red; padding: 20px;'>
+    <h3>⚠️ Request nicht gefunden</h3>
+    <p th:text="${errorMessage}">Der Request konnte nicht gefunden werden.</p>
+</div>
+
+<!-- Warning Fragment -->
+<div th:fragment="warning" style='color: orange; padding: 20px;'>
+    <h3>⚠️ Keine Test-Generatoren verfügbar</h3>
+    <p>Es wurden keine Test-Generatoren gefunden. Stellen Sie sicher, dass die entsprechenden Test-Frameworks in Ihrem Projekt verfügbar sind.</p>
+</div>
+
+<!-- Test Snippets Fragment -->
+<div th:fragment="snippets">
+    <div class="test-snippet-section" th:each="entry : ${snippets}">
+        <h3 th:text="${entry.key}">Test Framework</h3>
+        <pre><code th:text="${entry.value}">// Test code here</code></pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+    </div>
+</div>
+</body>
+</html>
+

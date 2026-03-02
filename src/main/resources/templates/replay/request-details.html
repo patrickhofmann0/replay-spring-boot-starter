@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Error Fragment -->
+<div th:fragment="error" style='color: red; padding: 20px;'>
+    <h3>⚠️ Request nicht gefunden</h3>
+    <p th:text="${errorMessage}">Der Request konnte nicht gefunden werden.</p>
+</div>
+
+<div class='request-details' th:fragment="details">
+
+    <!-- Generate Test Section -->
+    <div class='detail-section'>
+        <h3>Test Generation</h3>
+        <button th:attr="hx-get=@{'/replay/generate/' + ${request.id}}, hx-target='#generated-tests', hx-swap='innerHTML'">Generate Test Code</button>
+        <div id='generated-tests' style='margin-top: 20px;'></div>
+    </div>
+
+    <!-- Request Info Section -->
+    <div class='detail-section'>
+
+        <h3>Request Info</h3>
+        <div class='detail-item'>
+            <strong>Method:</strong>
+            <span th:class="'method-badge ' + ${request.method.toLowerCase()}" th:text="${request.method}">GET</span>
+        </div>
+        <div class='detail-item'>
+            <strong>Path:</strong>
+            <span th:text="${request.path}">/api/example</span>
+        </div>
+        <div class='detail-item' th:if="${request.queryParams != null && !request.queryParams.isEmpty()}">
+            <strong>Query Parameters:</strong>
+            <span th:text="${request.queryParams}"></span>
+        </div>
+        <div class='detail-item'>
+            <strong>Timestamp:</strong>
+            <span th:text="${#temporals.format(request.timestamp, 'yyyy-MM-dd HH:mm:ss')}">2024-01-01 12:00:00</span>
+        </div>
+        <div class='detail-item'>
+            <strong>Status:</strong>
+            <span th:class="'status-badge status-' + ${request.responseStatus / 100} + 'xx'" th:text="${request.responseStatus}">200</span>
+        </div>
+    </div>
+
+    <!-- Headers Section -->
+    <div class='detail-section' th:if="${request.headers != null && !request.headers.isEmpty()}">
+        <h3>Request Headers</h3>
+        <div class='headers-list'>
+            <div class='header-item' th:each="header : ${request.headers}">
+                <span class='header-key' th:text="${header.key}">Content-Type</span>:
+                <span class='header-value' th:text="${header.value}">application/json</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Request Body Section -->
+    <div class='detail-section' th:if="${request.requestBody != null && !request.requestBody.isEmpty()}">
+        <h3>Request Body</h3>
+        <pre><code th:text="${request.requestBody}">{"example": "data"}</code></pre>
+        <button class='copy-btn' onclick='copyToClipboard(this)'>Copy</button>
+    </div>
+
+    <!-- Response Body Section -->
+    <div class='detail-section' th:if="${request.responseBody != null && !request.responseBody.isEmpty()}">
+        <h3>Response Body</h3>
+        <pre><code th:text="${request.responseBody}">{"result": "success"}</code></pre>
+        <button class='copy-btn' onclick='copyToClipboard(this)'>Copy</button>
+    </div>
+
+</div>
+</body>
+</html>
+
+

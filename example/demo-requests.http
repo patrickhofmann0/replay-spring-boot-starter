@@ -1,0 +1,14 @@
+### GET request to /hello endpoint (default parameter)
+GET http://localhost:8080/hello
+
+### GET request to /hello endpoint (with name parameter)
+GET http://localhost:8080/hello?name=Patrick
+
+### POST request to /echo endpoint
+POST http://localhost:8080/echo
+Content-Type: application/json
+
+{
+  "name": "Patrick"
+}
+
