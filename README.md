@@ -133,7 +133,7 @@ curl -H "Authorization: Bearer secret-token" http://localhost:8080/api/secured
 // Authorization: [REDACTED]
 ```
 
-Weitere Details siehe [SECURITY.md](SECURITY.md).
+Weitere Details siehe [SECURITY.md](docs/SECURITY.md).
 
 ## 🎨 Dashboard-Features
 
@@ -328,6 +328,6 @@ Dieses Projekt ist unter der [Apache License 2.0](https://www.apache.org/license
 Bei Fragen oder Problemen:
 
 - Öffnen Sie ein [Issue](https://github.com/dein-github-name/replay-spring-boot-starter/issues)
-- Siehe auch [SECURITY.md](SECURITY.md) für Security-bezogene Fragen
+- Siehe auch [SECURITY.md](docs/SECURITY.md) für Security-bezogene Fragen
 
 ---
