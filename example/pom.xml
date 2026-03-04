@@ -8,7 +8,7 @@
 		<version>4.0.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>io.github.patrickhofmann0.replay-demo</groupId>
+	<groupId>de.hofmann-hbm.replay-demo</groupId>
 	<artifactId>replay-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>replay-app</name>

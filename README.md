@@ -1,6 +1,4 @@
 
-**Hinweis**: Dieses Projekt befindet sich in aktiver Entwicklung. Die API kann sich noch ändern.
-
 # Spring Replay - Spring Boot Starter
 
 [![Java 21](https://img.shields.io/badge/Java-21-blue.svg)](https://openjdk.java.net/)
@@ -34,7 +32,7 @@ Fügen Sie die Abhängigkeit zu Ihrer `pom.xml` hinzu:
 
 ```xml
 <dependency>
-    <groupId>io.github.patrickhofmann0</groupId>
+    <groupId>de.hofmann-hbm.replay</groupId>
     <artifactId>replay-spring-boot-starter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 </dependency>
@@ -150,7 +148,7 @@ Das integrierte Web-Dashboard bietet:
 ### Projekt klonen
 
 ```bash
-git clone https://github.com/dein-github-name/replay-spring-boot-starter.git
+git clone https://github.com/patrickhofmann0/replay-spring-boot-starter.git
 cd replay-spring-boot-starter
 ```
 
@@ -184,7 +182,7 @@ Beispiel-Requests befinden sich in `example/demo-requests.http`.
 
 ```
 replay-spring-boot-starter/
-├── src/main/java/io/github/patrickhofmann0/replay/
+├── src/main/java/de/hofmannhbm/replay/
 │   ├── config/
 │   │   ├── ReplayAutoConfiguration.java      # Spring Boot Auto-Configuration
 │   │   └── ReplayProperties.java             # Konfigurationsparameter
@@ -278,39 +276,6 @@ Folgende Pfade werden standardmäßig **nicht** erfasst:
 - `/favicon.ico`
 
 Weitere Pfade können über `replay.exclude-paths` konfiguriert werden.
-
-## 🚧 Bekannte Einschränkungen
-
-- **In-Memory-Speicher**: Requests werden nur im Arbeitsspeicher gespeichert und gehen bei Neustart verloren
-- **Single-Instance**: Funktioniert nur in Single-Instance-Umgebungen (nicht für Cluster geeignet)
-- **Maximale Anzahl**: Standardmäßig werden maximal 100 Requests gespeichert (konfigurierbar)
-
-## 🗺 Roadmap
-
-- [ ] Persistente Speicherung (Datenbank, Dateisystem)
-- [ ] REST API für externen Zugriff
-- [ ] Weitere Test-Generatoren (RestAssured, WebTestClient)
-- [ ] Export/Import von Requests
-- [ ] Replay-Funktion (automatisches Wiederholen erfasster Requests)
-- [ ] Filter-Funktionen im Dashboard
-- [ ] Integration mit CI/CD-Pipelines
-
-## 🤝 Beitragen
-
-Contributions sind willkommen! Bitte:
-
-1. Forken Sie das Repository
-2. Erstellen Sie einen Feature-Branch (`git checkout -b feature/AmazingFeature`)
-3. Committen Sie Ihre Änderungen (`git commit -m 'Add some AmazingFeature'`)
-4. Pushen Sie den Branch (`git push origin feature/AmazingFeature`)
-5. Öffnen Sie einen Pull Request
-
-### Entwicklungs-Guidelines
-
-- Java 21 verwenden
-- Bestehende Code-Konventionen befolgen
-- Tests für neue Features schreiben
-- Javadoc für öffentliche APIs schreiben
 
 ## 📄 Lizenz
 
