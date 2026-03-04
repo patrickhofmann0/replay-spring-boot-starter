@@ -4,6 +4,7 @@
 [![Java 21](https://img.shields.io/badge/Java-21-blue.svg)](https://openjdk.java.net/)
 [![Spring Boot 4.0](https://img.shields.io/badge/Spring%20Boot-4.0-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Build](https://github.com/patrickhofmann0/replay-spring-boot-starter/actions/workflows/build.yml/badge.svg)](https://github.com/patrickhofmann0/replay-spring-boot-starter/actions/workflows/build.yml)
 
 Ein Spring Boot Starter, der automatisch HTTP-Requests erfasst, sichbar macht und daraus JUnit-Tests generiert. 
 Perfekt für Debugging, Test-Driven Development, API-Dokumentation und Regression Testing.
