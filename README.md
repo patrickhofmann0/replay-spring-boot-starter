@@ -1,5 +1,5 @@
 
-# Spring Replay - Spring Boot Starter
+# Replay Web - Spring Boot Starter
 
 [![Java 21](https://img.shields.io/badge/Java-21-blue.svg)](https://openjdk.java.net/)
 [![Spring Boot 4.0](https://img.shields.io/badge/Spring%20Boot-4.0-brightgreen.svg)](https://spring.io/projects/spring-boot)
