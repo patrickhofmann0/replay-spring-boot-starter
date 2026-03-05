@@ -106,7 +106,7 @@ class ReplayCaptureFilterTest {
 
         List<CapturedRequest> captured = repository.findAll();
         assertThat(captured).hasSize(1);
-        assertThat(captured.get(0).headers().get("Authorization")).isEqualTo("[REDACTED]");
+        assertThat(captured.get(0).requestHeaders().get("Authorization")).isEqualTo("[REDACTED]");
     }
 
     @Test
@@ -120,7 +120,7 @@ class ReplayCaptureFilterTest {
         filter.doFilter(request, response, chain);
 
         List<CapturedRequest> captured = repository.findAll();
-        assertThat(captured.get(0).headers().get("Cookie")).isEqualTo("[REDACTED]");
+        assertThat(captured.get(0).requestHeaders().get("Cookie")).isEqualTo("[REDACTED]");
     }
 
     @Test
@@ -135,8 +135,8 @@ class ReplayCaptureFilterTest {
         filter.doFilter(request, response, chain);
 
         List<CapturedRequest> captured = repository.findAll();
-        assertThat(captured.get(0).headers().get("Content-Type")).isEqualTo("application/json");
-        assertThat(captured.get(0).headers().get("Accept")).isEqualTo("application/json");
+        assertThat(captured.get(0).requestHeaders().get("Content-Type")).isEqualTo("application/json");
+        assertThat(captured.get(0).requestHeaders().get("Accept")).isEqualTo("application/json");
     }
 
     @Test

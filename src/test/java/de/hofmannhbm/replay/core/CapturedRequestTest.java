@@ -1,5 +1,6 @@
 package de.hofmannhbm.replay.core;
 
+import de.hofmannhbm.replay.TestDataFactory;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -16,7 +17,8 @@ class CapturedRequestTest {
     void shouldCreateCapturedRequestWithAllFields() {
         // Given
         LocalDateTime now = LocalDateTime.now();
-        Map<String, String> headers = Map.of("Content-Type", "application/json");
+        Map<String, String> requestHeaders = Map.of("Content-Type", "application/json");
+        Map<String, String> responseHeaders = Map.of("X-Response", "test");
 
         // When
         CapturedRequest request = new CapturedRequest(
@@ -24,10 +26,12 @@ class CapturedRequestTest {
                 "POST",
                 "/api/users",
                 "id=123",
-                headers,
+                requestHeaders,
+                responseHeaders,
                 "{\"name\":\"John\"}",
                 200,
                 "{\"id\":\"123\",\"name\":\"John\"}",
+                "application/json",
                 now
         );
 
@@ -36,20 +40,24 @@ class CapturedRequestTest {
         assertThat(request.method()).isEqualTo("POST");
         assertThat(request.path()).isEqualTo("/api/users");
         assertThat(request.queryParams()).isEqualTo("id=123");
-        assertThat(request.headers()).isEqualTo(headers);
+        assertThat(request.requestHeaders()).isEqualTo(requestHeaders);
+        assertThat(request.responseHeaders()).isEqualTo(responseHeaders);
         assertThat(request.requestBody()).isEqualTo("{\"name\":\"John\"}");
         assertThat(request.responseStatus()).isEqualTo(200);
         assertThat(request.responseBody()).isEqualTo("{\"id\":\"123\",\"name\":\"John\"}");
+        assertThat(request.responseContentType()).isEqualTo("application/json");
         assertThat(request.timestamp()).isEqualTo(now);
     }
 
     @Test
     void shouldDetectJsonBodyWithObject() {
         // Given
-        CapturedRequest request = new CapturedRequest(
-                "id", "POST", "/api", null, Map.of(),
-                "{\"key\":\"value\"}", 200, "", LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequestBuilder()
+                .id("id")
+                .method("POST")
+                .path("/api")
+                .requestBody("{\"key\":\"value\"}")
+                .build();
 
         // Then
         assertThat(request.hasJsonBody()).isTrue();
@@ -58,10 +66,12 @@ class CapturedRequestTest {
     @Test
     void shouldDetectJsonBodyWithArray() {
         // Given
-        CapturedRequest request = new CapturedRequest(
-                "id", "GET", "/api", null, Map.of(),
-                "[{\"key\":\"value\"}]", 200, "", LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequestBuilder()
+                .id("id")
+                .method("GET")
+                .path("/api")
+                .requestBody("[{\"key\":\"value\"}]")
+                .build();
 
         // Then
         assertThat(request.hasJsonBody()).isTrue();
@@ -70,10 +80,12 @@ class CapturedRequestTest {
     @Test
     void shouldReturnFalseForNonJsonBody() {
         // Given
-        CapturedRequest request = new CapturedRequest(
-                "id", "POST", "/api", null, Map.of(),
-                "plain text", 200, "", LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequestBuilder()
+                .id("id")
+                .method("POST")
+                .path("/api")
+                .requestBody("plain text")
+                .build();
 
         // Then
         assertThat(request.hasJsonBody()).isFalse();
@@ -82,10 +94,7 @@ class CapturedRequestTest {
     @Test
     void shouldReturnFalseForNullRequestBody() {
         // Given
-        CapturedRequest request = new CapturedRequest(
-                "id", "GET", "/api", null, Map.of(),
-                null, 200, "", LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequest("id", "GET", "/api");
 
         // Then
         assertThat(request.hasJsonBody()).isFalse();
@@ -94,10 +103,7 @@ class CapturedRequestTest {
     @Test
     void shouldReturnShortPathForShortPath() {
         // Given
-        CapturedRequest request = new CapturedRequest(
-                "id", "GET", "/api/users", null, Map.of(),
-                null, 200, "", LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequest("id", "GET", "/api/users");
 
         // When
         String shortPath = request.getShortPath();
@@ -110,10 +116,7 @@ class CapturedRequestTest {
     void shouldTruncateLongPath() {
         // Given
         String longPath = "/api/very/long/path/that/exceeds/thirty/characters";
-        CapturedRequest request = new CapturedRequest(
-                "id", "GET", longPath, null, Map.of(),
-                null, 200, "", LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequest("id", "GET", longPath);
 
         // When
         String shortPath = request.getShortPath();
@@ -127,10 +130,11 @@ class CapturedRequestTest {
     @Test
     void shouldReturnEmptyStringForNullPath() {
         // Given
-        CapturedRequest request = new CapturedRequest(
-                "id", "GET", null, null, Map.of(),
-                null, 200, "", LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequestBuilder()
+                .id("id")
+                .method("GET")
+                .path(null)
+                .build();
 
         // When
         String shortPath = request.getShortPath();
@@ -143,10 +147,7 @@ class CapturedRequestTest {
     void shouldHandleExactly30CharactersPath() {
         // Given: exactly 30 chars
         String path = "/api/path123456789012345678901";
-        CapturedRequest request = new CapturedRequest(
-                "id", "GET", path, null, Map.of(),
-                null, 200, "", LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequest("id", "GET", path);
 
         // When
         String shortPath = request.getShortPath();

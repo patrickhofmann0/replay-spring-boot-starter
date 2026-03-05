@@ -1,5 +1,6 @@
 package de.hofmannhbm.replay.generator;
 
+import de.hofmannhbm.replay.TestDataFactory;
 import de.hofmannhbm.replay.core.CapturedRequest;
 import org.junit.jupiter.api.Test;
 
@@ -28,10 +29,7 @@ class TestGenerationServiceTest {
 
         TestGenerationService service = new TestGenerationService(List.of(mockMvcGen, customGen));
 
-        CapturedRequest request = new CapturedRequest(
-                "id", "GET", "/api/test", null, Map.of(),
-                null, 200, null, LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequest("id", "GET", "/api/test");
 
         Map<String, String> result = service.generateAllFormats(request);
 
@@ -44,10 +42,7 @@ class TestGenerationServiceTest {
     void shouldReturnEmptyMapWhenNoGeneratorsRegistered() {
         TestGenerationService service = new TestGenerationService(List.of());
 
-        CapturedRequest request = new CapturedRequest(
-                "id", "GET", "/api/test", null, Map.of(),
-                null, 200, null, LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequest("id", "GET", "/api/test");
 
         Map<String, String> result = service.generateAllFormats(request);
 
@@ -59,9 +54,8 @@ class TestGenerationServiceTest {
         TestCodeGenerator mockMvcGen = new MockMvcGenerator();
         TestGenerationService service = new TestGenerationService(List.of(mockMvcGen));
 
-        CapturedRequest request = new CapturedRequest(
-                "id", "POST", "/api/users", null, Map.of(),
-                "{\"name\":\"John\"}", 201, "{\"id\":1}", LocalDateTime.now()
+        CapturedRequest request = TestDataFactory.createRequestWithBody(
+                "id", "POST", "/api/users", "{\"name\":\"John\"}", 201, "{\"id\":1}"
         );
 
         Map<String, String> result = service.generateAllFormats(request);
@@ -90,10 +84,14 @@ class TestGenerationServiceTest {
 
         TestGenerationService service = new TestGenerationService(List.of(trackingGen));
 
-        CapturedRequest request = new CapturedRequest(
-                "test-id", "DELETE", "/api/users/123", "force=true", Map.of("Auth", "token"),
-                null, 204, null, LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequestBuilder()
+                .id("test-id")
+                .method("DELETE")
+                .path("/api/users/123")
+                .queryString("force=true")
+                .requestHeaders(Map.of("Auth", "token"))
+                .statusCode(204)
+                .build();
 
         service.generateAllFormats(request);
 

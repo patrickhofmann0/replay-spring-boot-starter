@@ -1,5 +1,6 @@
 package de.hofmannhbm.replay.core;
 
+import de.hofmannhbm.replay.TestDataFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +25,7 @@ class InMemoryReplayRequestStorageTest {
     @Test
     void shouldSaveAndRetrieveRequest() {
         // Given
-        CapturedRequest request = createRequest("id-1", "GET", "/api/test");
+        CapturedRequest request = TestDataFactory.createRequest("id-1", "GET", "/api/test");
 
         // When
         storage.save(request);
@@ -38,8 +39,8 @@ class InMemoryReplayRequestStorageTest {
     @Test
     void shouldFindRequestById() {
         // Given
-        CapturedRequest request1 = createRequest("id-1", "GET", "/api/test1");
-        CapturedRequest request2 = createRequest("id-2", "POST", "/api/test2");
+        CapturedRequest request1 = TestDataFactory.createRequest("id-1", "GET", "/api/test1");
+        CapturedRequest request2 = TestDataFactory.createRequest("id-2", "POST", "/api/test2");
         storage.save(request1);
         storage.save(request2);
 
@@ -53,7 +54,7 @@ class InMemoryReplayRequestStorageTest {
     @Test
     void shouldReturnNullForNonExistentId() {
         // Given
-        storage.save(createRequest("id-1", "GET", "/api/test"));
+        storage.save(TestDataFactory.createRequest("id-1", "GET", "/api/test"));
 
         // When
         CapturedRequest found = storage.findById("non-existent");
@@ -84,10 +85,10 @@ class InMemoryReplayRequestStorageTest {
     void shouldEnforceFifoOrderWhenMaxSizeExceeded() {
         // Given: Storage with max size of 3
         storage = new InMemoryReplayRequestStorage(3);
-        CapturedRequest req1 = createRequest("id-1", "GET", "/api/1");
-        CapturedRequest req2 = createRequest("id-2", "GET", "/api/2");
-        CapturedRequest req3 = createRequest("id-3", "GET", "/api/3");
-        CapturedRequest req4 = createRequest("id-4", "GET", "/api/4");
+        CapturedRequest req1 = TestDataFactory.createRequest("id-1", "GET", "/api/1");
+        CapturedRequest req2 = TestDataFactory.createRequest("id-2", "GET", "/api/2");
+        CapturedRequest req3 = TestDataFactory.createRequest("id-3", "GET", "/api/3");
+        CapturedRequest req4 = TestDataFactory.createRequest("id-4", "GET", "/api/4");
 
         // When: Save 4 requests (exceeds max size of 3)
         storage.save(req1);
@@ -109,7 +110,7 @@ class InMemoryReplayRequestStorageTest {
 
         // When: Save 5 requests
         for (int i = 1; i <= 5; i++) {
-            storage.save(createRequest("id-" + i, "GET", "/api/" + i));
+            storage.save(TestDataFactory.createRequest("id-" + i, "GET", "/api/" + i));
         }
 
         // Then: Only last 2 requests should remain
@@ -122,8 +123,8 @@ class InMemoryReplayRequestStorageTest {
     @Test
     void shouldClearAllRequests() {
         // Given
-        storage.save(createRequest("id-1", "GET", "/api/1"));
-        storage.save(createRequest("id-2", "POST", "/api/2"));
+        storage.save(TestDataFactory.createRequest("id-1", "GET", "/api/1"));
+        storage.save(TestDataFactory.createRequest("id-2", "POST", "/api/2"));
         assertThat(storage.findAll()).hasSize(2);
 
         // When
@@ -140,7 +141,7 @@ class InMemoryReplayRequestStorageTest {
 
         // When: Save 101 requests
         for (int i = 1; i <= 101; i++) {
-            storage.save(createRequest("id-" + i, "GET", "/api/" + i));
+            storage.save(TestDataFactory.createRequest("id-" + i, "GET", "/api/" + i));
         }
 
         // Then: Should have 100 requests (default max size)
@@ -157,7 +158,7 @@ class InMemoryReplayRequestStorageTest {
 
         // When: Save 101 requests
         for (int i = 1; i <= 101; i++) {
-            storage.save(createRequest("id-" + i, "GET", "/api/" + i));
+            storage.save(TestDataFactory.createRequest("id-" + i, "GET", "/api/" + i));
         }
 
         // Then: Should have 100 requests (default max size)
@@ -178,7 +179,7 @@ class InMemoryReplayRequestStorageTest {
             threads[i] = new Thread(() -> {
                 for (int j = 0; j < requestsPerThread; j++) {
                     String id = "thread-" + threadId + "-req-" + j;
-                    storage.save(createRequest(id, "GET", "/api/test"));
+                    storage.save(TestDataFactory.createRequest(id, "GET", "/api/test"));
                 }
             });
             threads[i].start();
@@ -196,31 +197,17 @@ class InMemoryReplayRequestStorageTest {
     @Test
     void shouldReturnCopyOfStorageNotOriginal() {
         // Given
-        CapturedRequest request = createRequest("id-1", "GET", "/api/test");
+        CapturedRequest request = TestDataFactory.createRequest("id-1", "GET", "/api/test");
         storage.save(request);
 
         // When: Get all requests and try to modify the list
         List<CapturedRequest> firstCall = storage.findAll();
-        storage.save(createRequest("id-2", "POST", "/api/test2"));
+        storage.save(TestDataFactory.createRequest("id-2", "POST", "/api/test2"));
         List<CapturedRequest> secondCall = storage.findAll();
 
         // Then: Lists should be independent
         assertThat(firstCall).hasSize(1);
         assertThat(secondCall).hasSize(2);
-    }
-
-    private CapturedRequest createRequest(String id, String method, String path) {
-        return new CapturedRequest(
-                id,
-                method,
-                path,
-                null,
-                Map.of(),
-                "",
-                200,
-                "",
-                LocalDateTime.now()
-        );
     }
 }
 

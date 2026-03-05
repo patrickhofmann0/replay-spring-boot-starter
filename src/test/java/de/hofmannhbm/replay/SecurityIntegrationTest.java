@@ -91,8 +91,8 @@ class SecurityIntegrationTest {
         assertThat(captured.get(0).responseStatus()).isEqualTo(200);
         assertThat(captured.get(0).responseBody()).contains("Secured Content");
         // Der Authorization Header wurde als [REDACTED] erfasst (nicht im Klartext)
-        assertThat(captured.get(0).headers()).containsKey("Authorization");
-        assertThat(captured.get(0).headers().get("Authorization")).isEqualTo("[REDACTED]");
+        assertThat(captured.get(0).requestHeaders()).containsKey("Authorization");
+        assertThat(captured.get(0).requestHeaders().get("Authorization")).isEqualTo("[REDACTED]");
     }
 
     @Test
@@ -164,7 +164,7 @@ class SecurityIntegrationTest {
         List<CapturedRequest> captured = repository.findAll();
         assertThat(captured).hasSize(1);
 
-        Map<String, String> headers = captured.get(0).headers();
+        Map<String, String> headers = captured.get(0).requestHeaders();
         // Authorization und Cookie sollten redacted sein
         assertThat(headers.get("Authorization")).isEqualTo("[REDACTED]");
         assertThat(headers.get("Cookie")).isEqualTo("[REDACTED]");

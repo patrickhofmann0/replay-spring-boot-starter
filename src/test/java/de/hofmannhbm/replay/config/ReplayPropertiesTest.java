@@ -16,7 +16,10 @@ class ReplayPropertiesTest {
         assertThat(props.enabled()).isTrue();
         assertThat(props.maxCapturedRequests()).isEqualTo(100);
         assertThat(props.excludePaths()).containsExactly("/actuator/**", "/favicon.ico");
-        assertThat(props.excludeHeaders()).containsExactly("Authorization", "Cookie", "X-Api-Key");
+        assertThat(props.excludeHeaders()).containsExactly(
+                "Authorization", "Cookie", "Set-Cookie", "X-Api-Key",
+                "Proxy-Authorization", "WWW-Authenticate", "X-Auth-Token", "X-CSRF-Token"
+        );
     }
 
     @Test
@@ -76,7 +79,10 @@ class ReplayPropertiesTest {
         assertThat(props.enabled()).isTrue(); // default
         assertThat(props.maxCapturedRequests()).isEqualTo(200);
         assertThat(props.excludePaths()).containsExactly("/health");
-        assertThat(props.excludeHeaders()).containsExactly("Authorization", "Cookie", "X-Api-Key"); // default
+        assertThat(props.excludeHeaders()).containsExactly(
+                "Authorization", "Cookie", "Set-Cookie", "X-Api-Key",
+                "Proxy-Authorization", "WWW-Authenticate", "X-Auth-Token", "X-CSRF-Token"
+        ); // default
     }
 }
 

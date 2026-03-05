@@ -1,5 +1,6 @@
 package de.hofmannhbm.replay.generator;
 
+import de.hofmannhbm.replay.TestDataFactory;
 import de.hofmannhbm.replay.core.CapturedRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,10 +26,7 @@ class MockMvcGeneratorTest {
 
     @Test
     void shouldGenerateSimpleGetRequest() {
-        CapturedRequest request = new CapturedRequest(
-                "id", "GET", "/api/users", null, Map.of(),
-                null, 200, null, LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequest("id", "GET", "/api/users");
 
         String code = generator.generate(request);
 
@@ -41,10 +39,12 @@ class MockMvcGeneratorTest {
 
     @Test
     void shouldGeneratePostRequest() {
-        CapturedRequest request = new CapturedRequest(
-                "id", "POST", "/api/users", null, Map.of(),
-                null, 201, null, LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequestBuilder()
+                .id("id")
+                .method("POST")
+                .path("/api/users")
+                .statusCode(201)
+                .build();
 
         String code = generator.generate(request);
 
@@ -54,10 +54,7 @@ class MockMvcGeneratorTest {
 
     @Test
     void shouldGeneratePutRequest() {
-        CapturedRequest request = new CapturedRequest(
-                "id", "PUT", "/api/users/1", null, Map.of(),
-                null, 200, null, LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequest("id", "PUT", "/api/users/1");
 
         String code = generator.generate(request);
 
@@ -66,10 +63,12 @@ class MockMvcGeneratorTest {
 
     @Test
     void shouldGenerateDeleteRequest() {
-        CapturedRequest request = new CapturedRequest(
-                "id", "DELETE", "/api/users/1", null, Map.of(),
-                null, 204, null, LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequestBuilder()
+                .id("id")
+                .method("DELETE")
+                .path("/api/users/1")
+                .statusCode(204)
+                .build();
 
         String code = generator.generate(request);
 
@@ -80,10 +79,13 @@ class MockMvcGeneratorTest {
     @Test
     void shouldIncludeRequestBodyWhenPresent() {
         String requestBody = "{\"name\":\"John\",\"email\":\"john@test.com\"}";
-        CapturedRequest request = new CapturedRequest(
-                "id", "POST", "/api/users", null, Map.of(),
-                requestBody, 201, null, LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequestBuilder()
+                .id("id")
+                .method("POST")
+                .path("/api/users")
+                .requestBody(requestBody)
+                .statusCode(201)
+                .build();
 
         String code = generator.generate(request);
 
@@ -95,10 +97,13 @@ class MockMvcGeneratorTest {
     @Test
     void shouldIncludeResponseBodyAssertion() {
         String responseBody = "{\"id\":1,\"name\":\"John\"}";
-        CapturedRequest request = new CapturedRequest(
-                "id", "GET", "/api/users/1", null, Map.of(),
-                null, 200, responseBody, LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequestBuilder()
+                .id("id")
+                .method("GET")
+                .path("/api/users/1")
+                .responseBody(responseBody)
+                .responseContentType("application/json")
+                .build();
 
         String code = generator.generate(request);
 
@@ -109,10 +114,12 @@ class MockMvcGeneratorTest {
 
     @Test
     void shouldHandleQueryParameters() {
-        CapturedRequest request = new CapturedRequest(
-                "id", "GET", "/api/search", "q=test&page=1", Map.of(),
-                null, 200, null, LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequestBuilder()
+                .id("id")
+                .method("GET")
+                .path("/api/search")
+                .queryString("q=test&page=1")
+                .build();
 
         String code = generator.generate(request);
 
@@ -122,10 +129,12 @@ class MockMvcGeneratorTest {
 
     @Test
     void shouldHandleMultipleQueryParameters() {
-        CapturedRequest request = new CapturedRequest(
-                "id", "GET", "/api/search", "q=test&page=1&limit=10", Map.of(),
-                null, 200, null, LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequestBuilder()
+                .id("id")
+                .method("GET")
+                .path("/api/search")
+                .queryString("q=test&page=1&limit=10")
+                .build();
 
         String code = generator.generate(request);
 
@@ -136,10 +145,13 @@ class MockMvcGeneratorTest {
 
     @Test
     void shouldHandleEmptyRequestBody() {
-        CapturedRequest request = new CapturedRequest(
-                "id", "POST", "/api/users", null, Map.of(),
-                "", 201, null, LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequestBuilder()
+                .id("id")
+                .method("POST")
+                .path("/api/users")
+                .requestBody("")
+                .statusCode(201)
+                .build();
 
         String code = generator.generate(request);
 
@@ -149,10 +161,13 @@ class MockMvcGeneratorTest {
 
     @Test
     void shouldHandleEmptyResponseBody() {
-        CapturedRequest request = new CapturedRequest(
-                "id", "DELETE", "/api/users/1", null, Map.of(),
-                null, 204, "", LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequestBuilder()
+                .id("id")
+                .method("DELETE")
+                .path("/api/users/1")
+                .statusCode(204)
+                .responseBody("")
+                .build();
 
         String code = generator.generate(request);
 
@@ -161,10 +176,16 @@ class MockMvcGeneratorTest {
 
     @Test
     void shouldGenerateCompleteTestMethod() {
-        CapturedRequest request = new CapturedRequest(
-                "id", "POST", "/api/users", "source=test", Map.of(),
-                "{\"name\":\"John\"}", 201, "{\"id\":1}", LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequestBuilder()
+                .id("id")
+                .method("POST")
+                .path("/api/users")
+                .queryString("source=test")
+                .requestBody("{\"name\":\"John\"}")
+                .statusCode(201)
+                .responseBody("{\"id\":1}")
+                .responseContentType("application/json")
+                .build();
 
         String code = generator.generate(request);
 
@@ -177,10 +198,14 @@ class MockMvcGeneratorTest {
 
     @Test
     void shouldHandle4xxStatusCodes() {
-        CapturedRequest request = new CapturedRequest(
-                "id", "GET", "/api/users/999", null, Map.of(),
-                null, 404, "{\"error\":\"Not found\"}", LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequestBuilder()
+                .id("id")
+                .method("GET")
+                .path("/api/users/999")
+                .statusCode(404)
+                .responseBody("{\"error\":\"Not found\"}")
+                .responseContentType("application/json")
+                .build();
 
         String code = generator.generate(request);
 
@@ -190,10 +215,15 @@ class MockMvcGeneratorTest {
 
     @Test
     void shouldHandle5xxStatusCodes() {
-        CapturedRequest request = new CapturedRequest(
-                "id", "POST", "/api/users", null, Map.of(),
-                "{\"name\":\"John\"}", 500, "{\"error\":\"Internal error\"}", LocalDateTime.now()
-        );
+        CapturedRequest request = TestDataFactory.createRequestBuilder()
+                .id("id")
+                .method("POST")
+                .path("/api/users")
+                .requestBody("{\"name\":\"John\"}")
+                .statusCode(500)
+                .responseBody("{\"error\":\"Internal error\"}")
+                .responseContentType("application/json")
+                .build();
 
         String code = generator.generate(request);
 

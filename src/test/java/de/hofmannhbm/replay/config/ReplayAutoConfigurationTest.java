@@ -1,5 +1,6 @@
 package de.hofmannhbm.replay.config;
 
+import de.hofmannhbm.replay.TestDataFactory;
 import de.hofmannhbm.replay.core.CapturedRequest;
 import de.hofmannhbm.replay.core.InMemoryReplayRequestStorage;
 import de.hofmannhbm.replay.core.ReplayCaptureFilter;
@@ -28,10 +29,7 @@ class ReplayAutoConfigurationTest {
 
         // Verify max size by filling it
         for (int i = 0; i < 60; i++) {
-            storage.save(new CapturedRequest(
-                    "id-" + i, "GET", "/test", null, java.util.Map.of(),
-                    null, 200, null, java.time.LocalDateTime.now()
-            ));
+            storage.save(TestDataFactory.createRequest("id-" + i, "GET", "/test"));
         }
         assertThat(storage.findAll()).hasSize(50);
     }
@@ -82,11 +80,7 @@ class ReplayAutoConfigurationTest {
         assertThat(service).isNotNull();
 
         // Verify it works with a simple request
-        CapturedRequest request =
-                new CapturedRequest(
-                        "id", "GET", "/test", null, java.util.Map.of(),
-                        null, 200, null, java.time.LocalDateTime.now()
-                );
+        CapturedRequest request = TestDataFactory.createRequest("id", "GET", "/test");
 
         java.util.Map<String, String> result = service.generateAllFormats(request);
         assertThat(result).containsKey("MockMvc");
@@ -112,11 +106,7 @@ class ReplayAutoConfigurationTest {
                 List.of(mockMvcGen, customGen)
         );
 
-        CapturedRequest request =
-                new CapturedRequest(
-                        "id", "GET", "/test", null, java.util.Map.of(),
-                        null, 200, null, java.time.LocalDateTime.now()
-                );
+        CapturedRequest request = TestDataFactory.createRequest("id", "GET", "/test");
 
         java.util.Map<String, String> result = service.generateAllFormats(request);
         assertThat(result).hasSize(2);

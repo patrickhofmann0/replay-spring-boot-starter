@@ -1,5 +1,6 @@
 package de.hofmannhbm.replay;
 
+import de.hofmannhbm.replay.TestDataFactory;
 import de.hofmannhbm.replay.core.CapturedRequest;
 import de.hofmannhbm.replay.core.InMemoryReplayRequestStorage;
 import de.hofmannhbm.replay.generator.TestGenerationService;
@@ -39,8 +40,8 @@ class ReplayDashboardControllerTest {
     void shouldReturnDashboardViewWithRequests() {
         // Given
         List<CapturedRequest> requests = List.of(
-                createRequest("id-1", "GET", "/api/users"),
-                createRequest("id-2", "POST", "/api/users")
+                TestDataFactory.createRequest("id-1", "GET", "/api/users"),
+                TestDataFactory.createRequest("id-2", "POST", "/api/users")
         );
         when(repository.findAll()).thenReturn(requests);
         Model model = new ConcurrentModel();
@@ -57,7 +58,7 @@ class ReplayDashboardControllerTest {
     void shouldReturnRequestsTableFragment() {
         // Given
         List<CapturedRequest> requests = List.of(
-                createRequest("id-1", "GET", "/api/test")
+                TestDataFactory.createRequest("id-1", "GET", "/api/test")
         );
         when(repository.findAll()).thenReturn(requests);
         Model model = new ConcurrentModel();
@@ -73,7 +74,7 @@ class ReplayDashboardControllerTest {
     @Test
     void shouldReturnRequestDetailsWhenFound() {
         // Given
-        CapturedRequest request = createRequest("test-id", "POST", "/api/users");
+        CapturedRequest request = TestDataFactory.createRequest("test-id", "POST", "/api/users");
         when(repository.findById("test-id")).thenReturn(request);
         Model model = new ConcurrentModel();
 
@@ -107,7 +108,7 @@ class ReplayDashboardControllerTest {
     @Test
     void shouldGenerateTestSnippetsWhenRequestFound() {
         // Given
-        CapturedRequest request = createRequest("test-id", "GET", "/api/test");
+        CapturedRequest request = TestDataFactory.createRequest("test-id", "GET", "/api/test");
         Map<String, String> snippets = Map.of(
                 "MockMvc", "test code here",
                 "RestAssured", "rest assured code"
@@ -144,7 +145,7 @@ class ReplayDashboardControllerTest {
     @Test
     void shouldReturnWarningWhenNoSnippetsGenerated() {
         // Given
-        CapturedRequest request = createRequest("test-id", "GET", "/api/test");
+        CapturedRequest request = TestDataFactory.createRequest("test-id", "GET", "/api/test");
         when(repository.findById("test-id")).thenReturn(request);
         when(generationService.generateAllFormats(request)).thenReturn(Map.of());
         Model model = new ConcurrentModel();
@@ -168,13 +169,6 @@ class ReplayDashboardControllerTest {
         // Then
         assertThat(viewName).isEqualTo("replay/dashboard");
         assertThat(model.getAttribute("requests")).isEqualTo(List.of());
-    }
-
-    private CapturedRequest createRequest(String id, String method, String path) {
-        return new CapturedRequest(
-                id, method, path, null, Map.of(),
-                null, 200, null, LocalDateTime.now()
-        );
     }
 }
 
