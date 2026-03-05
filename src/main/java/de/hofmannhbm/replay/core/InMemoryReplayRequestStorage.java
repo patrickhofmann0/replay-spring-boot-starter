@@ -1,12 +1,15 @@
 package de.hofmannhbm.replay.core;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InMemoryReplayRequestStorage implements ReplayRequestRepository {
 
-    private final LinkedList<CapturedRequest> storage = new LinkedList<>();
+    private final ArrayDeque<CapturedRequest> storage = new ArrayDeque<>();
+    private final Map<String, CapturedRequest> idIndex = new HashMap<>();
     private final int maxSize;
 
     public InMemoryReplayRequestStorage(int maxSize) {
@@ -16,9 +19,11 @@ public class InMemoryReplayRequestStorage implements ReplayRequestRepository {
     @Override
     public synchronized void save(CapturedRequest request) {
         if (storage.size() >= maxSize) {
-            storage.removeFirst(); // Ältesten Request löschen (FIFO)
+            CapturedRequest removed = storage.removeFirst(); // Ältesten Request löschen (FIFO)
+            idIndex.remove(removed.id());
         }
         storage.add(request);
+        idIndex.put(request.id(), request);
     }
 
     @Override
@@ -31,13 +36,11 @@ public class InMemoryReplayRequestStorage implements ReplayRequestRepository {
      */
     public synchronized void clear() {
         storage.clear();
+        idIndex.clear();
     }
 
     @Override
-    public CapturedRequest findById(String id) {
-        return storage.stream()
-                      .filter(r -> r.id().equals(id))
-                      .findFirst()
-                      .orElse(null);
+    public synchronized CapturedRequest findById(String id) {
+        return idIndex.get(id);
     }
 }

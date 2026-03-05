@@ -11,11 +11,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 public class ReplayCaptureFilter extends OncePerRequestFilter {
@@ -72,7 +75,7 @@ public class ReplayCaptureFilter extends OncePerRequestFilter {
                 .anyMatch(pattern -> pathMatcher.match(pattern, path));
     }
 
-    private Map<String, String> extractHeaders(HttpServletRequest request) {
+    private Map<String, String> extractRequestHeaders(HttpServletRequest request) {
         Map<String, String> headers = new LinkedHashMap<>();
         Enumeration<String> headerNames = request.getHeaderNames();
         if (headerNames != null) {
@@ -84,6 +87,18 @@ public class ReplayCaptureFilter extends OncePerRequestFilter {
                 } else {
                     headers.put(name, request.getHeader(name));
                 }
+            }
+        }
+        return Collections.unmodifiableMap(headers);
+    }
+
+    private Map<String, String> extractResponseHeaders(HttpServletResponse response) {
+        Map<String, String> headers = new LinkedHashMap<>();
+        for (String name : response.getHeaderNames()) {
+            if (shouldExcludeHeader(name)) {
+                headers.put(name, "[REDACTED]");
+            } else {
+                headers.put(name, response.getHeader(name));
             }
         }
         return Collections.unmodifiableMap(headers);
@@ -109,20 +124,20 @@ public class ReplayCaptureFilter extends OncePerRequestFilter {
                     req.getMethod(),
                     req.getRequestURI(),
                     req.getQueryString(),
-                    extractHeaders(req),
+                    extractRequestHeaders(req),
+                    extractResponseHeaders(res),
                     requestBody,
                     res.getStatus(),
                     responseBody,
+                    responseContentType,
                     LocalDateTime.now()
             );
 
             // In den In-Memory Buffer speichern
             repository.save(captured);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             // Log error but don't fail the request
-            if (logger.isErrorEnabled()) {
-                logger.error("Failed to capture request", e);
-            }
+            logger.error("Failed to capture request", e);
         }
     }
 

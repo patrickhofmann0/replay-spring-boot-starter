@@ -18,6 +18,17 @@ public record ReplayProperties(
         if (enabled == null) enabled = true;
         if (maxCapturedRequests <= 0) maxCapturedRequests = 100;
         if (excludePaths == null) excludePaths = List.of("/actuator/**", "/favicon.ico");
-        if (excludeHeaders == null) excludeHeaders = List.of("Authorization", "Cookie", "X-Api-Key");
+        if (excludeHeaders == null) {
+            excludeHeaders = List.of(
+                "Authorization", 
+                "Cookie", 
+                "Set-Cookie",
+                "X-Api-Key",
+                "Proxy-Authorization",
+                "WWW-Authenticate",
+                "X-Auth-Token",
+                "X-CSRF-Token"
+            );
+        }
     }
 }
