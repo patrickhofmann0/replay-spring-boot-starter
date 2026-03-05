@@ -63,7 +63,9 @@ public class ReplayCaptureFilter extends OncePerRequestFilter {
     }
 
     private boolean shouldExclude(String path) {
-        var defaultPatchMatch = Stream.of("/replay/**", "/actuator/**")
+        // Exclude the configured dashboard path
+        String dashboardPattern = properties.dashboardPath() + "/**";
+        var defaultPatchMatch = Stream.of(dashboardPattern, "/actuator/**")
                 .anyMatch(exclude -> pathMatcher.match(exclude, path));
         if (defaultPatchMatch) {
             return true;
@@ -114,10 +116,16 @@ public class ReplayCaptureFilter extends OncePerRequestFilter {
 
     private void capture(ContentCachingRequestWrapper req, ContentCachingResponseWrapper res) {
         try {
+            String responseContentType = res.getContentType();
+            
+            // Check if content type should be captured
+            if (!shouldCaptureContentType(responseContentType)) {
+                return;
+            }
+            
             // Wir lesen die Bytes aus dem Cache
             String requestBody = new String(req.getContentAsByteArray(), StandardCharsets.UTF_8);
             String responseBody = new String(res.getContentAsByteArray(), StandardCharsets.UTF_8);
-            String responseContentType = res.getContentType();
 
             CapturedRequest captured = new CapturedRequest(
                     UUID.randomUUID().toString(),
@@ -139,6 +147,22 @@ public class ReplayCaptureFilter extends OncePerRequestFilter {
             // Log error but don't fail the request
             logger.error("Failed to capture request", e);
         }
+    }
+
+    private boolean shouldCaptureContentType(String contentType) {
+        if (contentType == null || contentType.isBlank()) {
+            return true; // Capture requests without content type
+        }
+        
+        if (properties.includeContentTypes() == null || properties.includeContentTypes().isEmpty()) {
+            return true; // No filter configured, capture all
+        }
+        
+        // Check if content type starts with any of the configured types
+        // This handles cases like "application/json; charset=UTF-8"
+        String baseContentType = contentType.split(";")[0].trim();
+        return properties.includeContentTypes().stream()
+                .anyMatch(included -> baseContentType.equalsIgnoreCase(included));
     }
 
 }

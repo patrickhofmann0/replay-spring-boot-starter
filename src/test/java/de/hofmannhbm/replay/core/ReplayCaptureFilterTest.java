@@ -20,7 +20,7 @@ class ReplayCaptureFilterTest {
     @BeforeEach
     void setUp() {
         repository = new InMemoryReplayRequestStorage(100);
-        ReplayProperties properties = new ReplayProperties(true, true, 100, null, null);
+        ReplayProperties properties = new ReplayProperties(true, true, 100, null, null, null, null);
         filter = new ReplayCaptureFilter(repository, properties);
     }
 
@@ -142,7 +142,7 @@ class ReplayCaptureFilterTest {
     @Test
     void shouldExcludeCustomPaths() throws Exception {
         ReplayProperties properties = new ReplayProperties(
-                true, true, 100, List.of("/custom/**"), null
+                true, true, 100, List.of("/custom/**"), null, null, null
         );
         filter = new ReplayCaptureFilter(repository, properties);
 

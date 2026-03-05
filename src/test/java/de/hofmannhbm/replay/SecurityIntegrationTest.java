@@ -37,7 +37,7 @@ class SecurityIntegrationTest {
     void setUp() {
         repository = new InMemoryReplayRequestStorage(100);
         // Verwende die Standard-excludeHeaders (Authorization, Cookie, X-Api-Key)
-        ReplayProperties properties = new ReplayProperties(true, true, 100, null, null);
+        ReplayProperties properties = new ReplayProperties(true, true, 100, null, null, null, null);
         filter = new ReplayCaptureFilter(repository, properties);
     }
 

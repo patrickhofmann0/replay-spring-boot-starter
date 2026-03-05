@@ -19,7 +19,7 @@ class ReplayAutoConfigurationTest {
 
     @Test
     void shouldCreateInMemoryRepositoryWithCorrectMaxSize() {
-        ReplayProperties properties = new ReplayProperties(true, true, 50, null, null);
+        ReplayProperties properties = new ReplayProperties(true, true, 50, null, null, null, null);
         ReplayAutoConfiguration config = new ReplayAutoConfiguration();
 
         ReplayRequestRepository repository = config.inMemoryRequestRepository(properties);
@@ -36,7 +36,7 @@ class ReplayAutoConfigurationTest {
 
     @Test
     void shouldCreateReplayCaptureFilter() {
-        ReplayProperties properties = new ReplayProperties(true, true, 100, null, null);
+        ReplayProperties properties = new ReplayProperties(true, true, 100, null, null, null, null);
         InMemoryReplayRequestStorage storage = new InMemoryReplayRequestStorage(100);
         ReplayAutoConfiguration config = new ReplayAutoConfiguration();
 
@@ -47,7 +47,7 @@ class ReplayAutoConfigurationTest {
 
     @Test
     void shouldRegisterFilterWithCorrectOrder() {
-        ReplayProperties properties = new ReplayProperties(true, true, 100, null, null);
+        ReplayProperties properties = new ReplayProperties(true, true, 100, null, null, null, null);
         InMemoryReplayRequestStorage storage = new InMemoryReplayRequestStorage(100);
         ReplayAutoConfiguration config = new ReplayAutoConfiguration();
         ReplayCaptureFilter filter = config.replayCaptureFilter(storage, properties);

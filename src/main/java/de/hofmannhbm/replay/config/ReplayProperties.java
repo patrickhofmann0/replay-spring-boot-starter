@@ -14,7 +14,9 @@ public record ReplayProperties(
         Boolean enabled,
         @Min(0) int maxCapturedRequests,
         List<String> excludePaths,
-        @NotNull List<String> excludeHeaders
+        @NotNull List<String> excludeHeaders,
+        List<String> includeContentTypes,
+        String dashboardPath
 ) {
     // Standardwerte via Java 21 Record-Konstruktor
     public ReplayProperties {
@@ -33,6 +35,18 @@ public record ReplayProperties(
                 "X-Auth-Token",
                 "X-CSRF-Token"
             );
+        }
+        if (includeContentTypes == null) {
+            includeContentTypes = List.of(
+                "application/json",
+                "application/xml",
+                "text/plain",
+                "text/html",
+                "application/x-www-form-urlencoded"
+            );
+        }
+        if (dashboardPath == null || dashboardPath.isBlank()) {
+            dashboardPath = "/replay";
         }
     }
 }
