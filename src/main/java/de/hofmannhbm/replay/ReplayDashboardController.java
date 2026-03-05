@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class ReplayDashboardController {
 
     private static final Logger log = LoggerFactory.getLogger(ReplayDashboardController.class);
+    private static final int MAX_ID_LENGTH = 100;
 
     private final ReplayRequestRepository repository;
     private final TestGenerationService generationService;
@@ -38,6 +39,18 @@ public class ReplayDashboardController {
 
     @GetMapping("/details/{id}")
     public String getRequestDetails(@PathVariable("id") String id, Model model) {
+        if (id == null || id.isBlank()) {
+            model.addAttribute("error", true);
+            model.addAttribute("errorMessage", "Die ID darf nicht leer sein.");
+            return "replay/request-details :: error";
+        }
+        
+        if (id.length() > MAX_ID_LENGTH) {
+            model.addAttribute("error", true);
+            model.addAttribute("errorMessage", "Die ID ist zu lang (max. " + MAX_ID_LENGTH + " Zeichen).");
+            return "replay/request-details :: error";
+        }
+        
         var request = repository.findById(id);
 
         if (request == null) {
@@ -53,6 +66,16 @@ public class ReplayDashboardController {
     @GetMapping("/generate/{id}")
     public String generateSnippet(@PathVariable("id") String id, Model model) {
         log.debug("Generate request for ID: {}", id);
+
+        if (id == null || id.isBlank()) {
+            model.addAttribute("errorMessage", "Die ID darf nicht leer sein.");
+            return "replay/test-snippets :: error";
+        }
+        
+        if (id.length() > MAX_ID_LENGTH) {
+            model.addAttribute("errorMessage", "Die ID ist zu lang (max. " + MAX_ID_LENGTH + " Zeichen).");
+            return "replay/test-snippets :: error";
+        }
 
         var request = repository.findById(id);
 

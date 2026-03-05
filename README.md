@@ -293,7 +293,7 @@ Dieses Projekt ist unter der [Apache License 2.0](https://www.apache.org/license
 
 Bei Fragen oder Problemen:
 
-- Öffnen Sie ein [Issue](https://github.com/dein-github-name/replay-spring-boot-starter/issues)
+- Öffnen Sie ein [Issue](https://github.com/patrickhofmann0/replay-spring-boot-starter/issues)
 - Siehe auch [SECURITY.md](docs/SECURITY.md) für Security-bezogene Fragen
 
 ---

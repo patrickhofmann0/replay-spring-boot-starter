@@ -4,6 +4,8 @@ import de.hofmannhbm.replay.core.CapturedRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Locale;
+
 public class MockMvcGenerator implements TestCodeGenerator {
 
     private static final Logger log = LoggerFactory.getLogger(MockMvcGenerator.class);
@@ -21,7 +23,7 @@ public class MockMvcGenerator implements TestCodeGenerator {
                 """.formatted(
                 request.method(),
                 request.path(),
-                request.method().toLowerCase(),
+                request.method().toLowerCase(Locale.ROOT),
                 request.path()
         ));
 

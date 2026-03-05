@@ -1,16 +1,20 @@
 package de.hofmannhbm.replay.config;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
+@Validated
 @ConfigurationProperties(prefix = "replay")
 public record ReplayProperties(
         Boolean dashboardEnabled,
         Boolean enabled,
-        int maxCapturedRequests,
+        @Min(0) int maxCapturedRequests,
         List<String> excludePaths,
-        List<String> excludeHeaders
+        @NotNull List<String> excludeHeaders
 ) {
     // Standardwerte via Java 21 Record-Konstruktor
     public ReplayProperties {
