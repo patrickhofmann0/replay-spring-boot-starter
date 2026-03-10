@@ -51,8 +51,6 @@ public class ReplayAutoConfiguration {
             ReplayCaptureFilter replayCaptureFilter) {
         FilterRegistrationBean<ReplayCaptureFilter> registration = new FilterRegistrationBean<>();
         registration.setFilter(replayCaptureFilter);
-        // WICHTIG: Order NACH Spring Security (Security Filter hat Order = -100)
-        // Damit erfassen wir auch Requests, die von Security abgelehnt werden
         registration.setOrder(Ordered.LOWEST_PRECEDENCE - 1);
         registration.addUrlPatterns("/*");
         log.info("Registered ReplayCaptureFilter with order: {}", registration.getOrder());

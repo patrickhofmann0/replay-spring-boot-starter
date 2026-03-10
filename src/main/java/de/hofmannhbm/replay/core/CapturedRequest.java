@@ -28,36 +28,6 @@ public record CapturedRequest(
         if (responseHeaders == null) responseHeaders = Map.of();
     }
 
-    /**
-     * Factory-Methode für Abwärtskompatibilität mit alter Signatur (ohne responseHeaders und responseContentType).
-     * @deprecated Verwenden Sie den vollständigen Konstruktor mit responseHeaders und responseContentType.
-     */
-    @Deprecated(since = "0.0.2", forRemoval = true)
-    public static CapturedRequest createLegacy(
-            String id,
-            String method,
-            String path,
-            String queryParams,
-            Map<String, String> headers,
-            String requestBody,
-            int responseStatus,
-            String responseBody,
-            LocalDateTime timestamp) {
-        return new CapturedRequest(
-                id,
-                method,
-                path,
-                queryParams,
-                headers,
-                Map.of(),
-                requestBody,
-                responseStatus,
-                responseBody,
-                null,
-                timestamp
-        );
-    }
-
     // Hilfsmethode: Prüft, ob der Body ein JSON ist
     public boolean hasJsonBody() {
         return requestBody != null && (requestBody.startsWith("{") || requestBody.startsWith("["));
