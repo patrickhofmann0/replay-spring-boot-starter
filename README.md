@@ -239,11 +239,7 @@ Dies ermöglicht die Erfassung aller Responses, unabhängig davon, ob sie von Se
 
 ## 🧪 Testing
 
-Das Projekt enthält umfangreiche Tests:
-
-- **Unit-Tests**: Für alle Komponenten (Filter, Storage, Generator, etc.)
-- **Integration-Tests**: Für Spring Security Integration
-- **Test-Coverage**: Hohe Test-Abdeckung aller kritischen Komponenten
+Das Projekt enthält Tests
 
 Beispiele:
 
@@ -287,13 +283,5 @@ Dieses Projekt ist unter der [Apache License 2.0](https://www.apache.org/license
 **Patrick Hofmann**
 
 - GitHub: [@patrickhofmann0](https://github.com/patrickhofmann0)
-
-
-## 📞 Support
-
-Bei Fragen oder Problemen:
-
-- Öffnen Sie ein [Issue](https://github.com/patrickhofmann0/replay-spring-boot-starter/issues)
-- Siehe auch [SECURITY.md](docs/SECURITY.md) für Security-bezogene Fragen
 
 ---
