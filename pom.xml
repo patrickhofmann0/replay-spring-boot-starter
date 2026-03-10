@@ -37,9 +37,6 @@
         <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <jacoco.version>0.8.12</jacoco.version>
-        <checkstyle.version>10.20.2</checkstyle.version>
-        <spotbugs.version>4.8.6.4</spotbugs.version>
     </properties>
 
     <dependencyManagement>
@@ -142,78 +139,7 @@
                 </executions>
             </plugin>
 
-            <!-- Code Quality Plugins -->
-            <!--<plugin>-->
-            <!--    <groupId>org.jacoco</groupId>-->
-            <!--    <artifactId>jacoco-maven-plugin</artifactId>-->
-            <!--    <version>${jacoco.version}</version>-->
-            <!--    <executions>-->
-            <!--        <execution>-->
-            <!--            <goals>-->
-            <!--                <goal>prepare-agent</goal>-->
-            <!--            </goals>-->
-            <!--        </execution>-->
-            <!--        <execution>-->
-            <!--            <id>report</id>-->
-            <!--            <phase>verify</phase>-->
-            <!--            <goals>-->
-            <!--                <goal>report</goal>-->
-            <!--            </goals>-->
-            <!--        </execution>-->
-            <!--    </executions>-->
-            <!--</plugin>-->
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.6.0</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.puppycrawl.tools</groupId>
-                        <artifactId>checkstyle</artifactId>
-                        <version>${checkstyle.version}</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <configLocation>google_checks.xml</configLocation>
-                    <consoleOutput>true</consoleOutput>
-                    <failsOnError>false</failsOnError>
-                    <failOnViolation>false</failOnViolation>
-                    <violationSeverity>warning</violationSeverity>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>validate</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-<!--            <plugin>-->
-<!--                <groupId>com.github.spotbugs</groupId>-->
-<!--                <artifactId>spotbugs-maven-plugin</artifactId>-->
-<!--                <version>${spotbugs.version}</version>-->
-<!--                <configuration>-->
-<!--                    <effort>Max</effort>-->
-<!--                    <threshold>Low</threshold>-->
-<!--                    <failOnError>false</failOnError>-->
-<!--                    <xmlOutput>true</xmlOutput>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>spotbugs-check</id>-->
-<!--                        <phase>verify</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>check</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
-
-<!--            <plugin>-->
+            <!--            <plugin>-->
 <!--                <groupId>org.apache.maven.plugins</groupId>-->
 <!--                <artifactId>maven-gpg-plugin</artifactId>-->
 <!--                <version>3.2.8</version>-->

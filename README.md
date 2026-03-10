@@ -48,16 +48,16 @@ Fügen Sie folgende Properties zu Ihrer `application.properties` hinzu:
 replay.enabled=true
 
 # Dashboard aktivieren/deaktivieren (Standard: false)
-replay.dashboard-enabled=true
+replay.dashboardEnabled=true
 
 # Maximale Anzahl erfasster Requests (Standard: 100)
-replay.max-captured-requests=100
+replay.maxCapturedRequests=100
 
 # Pfade, die nicht erfasst werden sollen (Standard: /actuator/**, /favicon.ico)
-replay.exclude-paths=/actuator/**,/favicon.ico,/static/**
+replay.excludePaths=/actuator/**,/favicon.ico,/static/**
 
 # Header, die verschleiert werden sollen (Standard: Authorization, Cookie, X-Api-Key)
-replay.exclude-headers=Authorization,Cookie,X-Api-Key,Set-Cookie
+replay.excludeHeaders=Authorization,Cookie,X-Api-Key,Set-Cookie
 ```
 
 ### 3. Anwendung starten
