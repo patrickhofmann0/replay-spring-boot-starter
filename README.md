@@ -5,8 +5,9 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Build](https://github.com/patrickhofmann0/replay-spring-boot-starter/actions/workflows/build.yml/badge.svg)](https://github.com/patrickhofmann0/replay-spring-boot-starter/actions/workflows/build.yml)
 
-Ein Spring Boot Starter, der automatisch HTTP-Requests erfasst, sichbar macht und daraus JUnit-Tests generiert. 
-Perfekt für Debugging, Test-Driven Development, API-Dokumentation und Regression Testing.
+Ein Spring Boot Starter, der automatisch HTTP-Requests erfasst und sichbar macht. 
+
+![img.png](doc/img/dashboard.png)
 
 ## 🚀 Features
 
