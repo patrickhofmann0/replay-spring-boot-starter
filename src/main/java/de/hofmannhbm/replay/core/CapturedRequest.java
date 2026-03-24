@@ -38,13 +38,5 @@ public record CapturedRequest(
         if (path == null) return "";
         return path.length() > 30 ? path.substring(0, 27) + "..." : path;
     }
-    
-    /**
-     * Getter für Abwärtskompatibilität mit altem "headers" Feld.
-     * @deprecated Verwenden Sie {@link #requestHeaders()} stattdessen.
-     */
-    @Deprecated(since = "0.0.2", forRemoval = true)
-    public Map<String, String> headers() {
-        return requestHeaders;
-    }
+
 }
