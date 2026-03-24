@@ -25,7 +25,7 @@ Perfekt für Debugging, Test-Driven Development, API-Dokumentation und Regressio
 ### Abhängigkeit zum Projekt hinzufügen (clone repo)
 
 ```bash
-mvn install
+mvn install -DskipTests
 ```
 
 Füge die Abhängigkeit zue `pom.xml` hinzu:
@@ -87,13 +87,6 @@ curl -H "Authorization: Bearer secret-token" http://localhost:8080/api/secured
 ```
 ## 🛠 Entwicklung
 
-### Projekt klonen
-
-```bash
-git clone https://github.com/patrickhofmann0/replay-spring-boot-starter.git
-cd replay-spring-boot-starter
-```
-
 ### Projekt bauen
 
 ```bash
@@ -109,6 +102,7 @@ mvn test
 ### Beispiel-Anwendung starten
 
 ```bash
+mvn install -DskipTests
 cd example
 mvn spring-boot:run
 ```
